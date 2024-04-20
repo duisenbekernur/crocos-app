@@ -4,6 +4,7 @@ import { basicPoints } from "@/mock/points.js";
 import { markerIcon } from "@/mock/mapIcons.js";
 
 import "leaflet-routing-machine";
+import { allCategories } from "@/mock/categories.js";
 
 export default {
   name: "LeafletMap",
@@ -32,6 +33,9 @@ export default {
       return this.routingControl && this.routingControl._routes
         ? this.routingControl._routes[0].summary
         : null;
+    },
+    categories() {
+      return allCategories;
     },
   },
   methods: {
@@ -190,6 +194,23 @@ export default {
       this.routingControl.remove();
       this.routingControl = null;
     },
+    sendMessage(type) {
+      switch (type) {
+        case "walk":
+          this.$emit("send-message", { message: `Добраться пешком до ${this.currentPoint.title}` });
+          break;
+        case "bus":
+          this.$emit("send-message", {
+            message: `Добраться на автобусе до ${this.currentPoint.title}`,
+          });
+          break;
+        case "taxi":
+          this.$emit("send-message", {
+            message: `Добраться на такси до ${this.currentPoint.title}`,
+          });
+          break;
+      }
+    },
   },
 };
 </script>
@@ -248,8 +269,30 @@ export default {
               </p>
             </div>
 
+            <p style="font-size: 15px; color: #9ca3af">Контакты</p>
+            <p style="font-size: 14px; margin-bottom: 10px">+7 (7172) 91‒71‒14</p>
+
             <p style="font-size: 15px; color: #9ca3af">Кратко о достопримечательности</p>
             <p style="font-size: 14px">{{ currentPoint.description }}</p>
+          </div>
+
+          <div style="margin-top: 20px">
+            <p style="font-size: 15px; color: #9ca3af">Как добраться</p>
+            <div style="display: flex; gap: 8px">
+              <img src="/walk.svg" class="destination-icon" @click="sendMessage('walk')" />
+              <img src="/bus.svg" class="destination-icon" @click="sendMessage('bus')" />
+              <img src="/taxi.svg" class="destination-icon" @click="sendMessage('taxi')" />
+            </div>
+          </div>
+
+          <div class="categorires">
+            <div
+              v-for="category in categories"
+              :key="category"
+              :class="{ category: true, active: currentPoint.categories.includes(category) }"
+            >
+              {{ category }}
+            </div>
           </div>
         </div>
       </div>
@@ -271,13 +314,13 @@ export default {
 
 .sidebar {
   position: fixed;
+  padding: 20px;
   top: 0;
   left: 0;
   width: 300px;
   height: 100%;
   background-color: #f2f2f2;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
   overflow-y: auto;
   transform: translateX(100%);
   transition: transform 0.3s ease-in-out;
@@ -315,5 +358,34 @@ export default {
     width: 30px;
     height: 30px;
   }
+}
+
+.categorires {
+  margin-top: 30px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 50px;
+
+  .category {
+    padding: 2px 8px;
+    border: 1px solid #4faff8;
+    border-radius: 14px;
+    cursor: pointer;
+  }
+  .category.active {
+    background-color: #4faff8;
+    color: #fff;
+  }
+}
+
+.destination-icon {
+  margin: 0 !important;
+  width: 25px !important;
+  height: 25px !important;
+  padding: 7px;
+  cursor: pointer;
+  background-color: #4faff8;
+  border-radius: 50% !important;
 }
 </style>

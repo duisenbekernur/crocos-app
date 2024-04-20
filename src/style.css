@@ -94,3 +94,7 @@ button:focus-visible {
   padding: 0 12px;
   height: 100%;
 }
+
+.leaflet-marker-icon.leaflet-zoom-animated.leaflet-interactive.leaflet-marker-draggable {
+  visibility: hidden;
+}

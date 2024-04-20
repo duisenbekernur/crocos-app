@@ -12,6 +12,12 @@ export default {
       surveyFinished: false,
     };
   },
+  methods: {
+    sendMessage(payload) {
+      this.$refs.chat.open = true;
+      this.$refs["chat"].sendMessage(payload);
+    },
+  },
 };
 </script>
 
@@ -19,8 +25,8 @@ export default {
   <div class="main">
     <CategoriesSurvey v-if="surveyFinished" @finish="bool => (surveyFinished = bool)" />
     <template v-else>
-      <LeafletMap />
-      <!--      <MapChat />-->
+      <LeafletMap @send-message="sendMessage" />
+      <MapChat ref="chat" />
     </template>
   </div>
 </template>
@@ -31,6 +37,7 @@ export default {
   height: 100vh;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 @media screen and (min-width: 640px) {
