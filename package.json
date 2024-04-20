@@ -9,8 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "2gis-maps": "^3.7.4",
     "pinia": "^2.1.7",
     "prettier": "^3.2.5",
+    "sass": "^1.75.0",
     "vue": "^3.4.19",
     "vue-router": "^4.3.0"
   },

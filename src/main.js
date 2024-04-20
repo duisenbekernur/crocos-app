@@ -3,15 +3,15 @@ import "./style.css";
 import App from "./pages/public/App.vue";
 
 import { createPinia } from "pinia";
-import publicRouter from "./routes/public";
+import publicRouter from "./routes/public/index.js";
 
 // Use private routes as you need. Example: authorization;
-import privateRouter from "./routes/private";
-import HelloPublic from "./components/HelloPublic.vue";
+// import privateRouter from "./routes/private";
+// import HelloPublic from "./components/HelloPublic.vue";
 
 async function startApp() {
     const pinia = createPinia();
-    const rootProps: Record<string, unknown> = {
+    const rootProps = {
         store: pinia,
     };
 
@@ -20,15 +20,14 @@ async function startApp() {
     let _router = null;
 
     try {
+        throw new Error('public app');
         // private router logic here ...
-        _app = App;
-
-        _router = privateRouter;
-        rootProps.router = privateRouter;
-
-        throw new Error("route");
+        // _app = App;
+        //
+        // _router = privateRouter;
+        // rootProps.router = privateRouter;
     } catch (err) {
-        _app = HelloPublic;
+        _app = App;
 
         _router = publicRouter;
         rootProps.router = publicRouter;
