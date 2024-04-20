@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "2gis-maps": "^3.7.4",
+    "leaflet": "^1.9.4",
+    "leaflet-routing-machine": "^3.2.12",
     "pinia": "^2.1.7",
     "prettier": "^3.2.5",
     "sass": "^1.75.0",

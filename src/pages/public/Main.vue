@@ -2,10 +2,11 @@
 import Map from "@/components/Map.vue";
 import CategoriesSurvey from "@/components/CategoriesSurvey.vue";
 import MapChat from "@/components/chat/MapChat.vue";
+import LeafletMap from "@/components/LeafletMap.vue";
 
 export default {
   name: "Main",
-  components: { MapChat, CategoriesSurvey, Map },
+  components: { LeafletMap, MapChat, CategoriesSurvey, Map },
   data() {
     return {
       surveyFinished: false,
@@ -18,8 +19,8 @@ export default {
   <div class="main">
     <CategoriesSurvey v-if="surveyFinished" @finish="bool => (surveyFinished = bool)" />
     <template v-else>
-      <Map />
-      <MapChat />
+      <LeafletMap />
+      <!--      <MapChat />-->
     </template>
   </div>
 </template>

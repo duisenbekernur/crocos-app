@@ -16,18 +16,32 @@ export default {
   methods: {
     initMap() {
       console.log(this.lng);
-      const coordsArr = this.ltd ? [this.ltd, this.lng] : [51.08935, 71.416];
+      const coordsArr = this.ltd ? [this.ltd, this.lng] : [51.12579, 71.4465];
 
       let map = DG.map("map", {
         center: coordsArr,
         zoom: 13,
       });
+      // controls
+      DG.control.location({ position: "bottomright" }).addTo(map);
+      DG.control.scale().addTo(map);
+      DG.control.ruler({ position: "bottomleft" }).addTo(map);
+      DG.control.traffic().addTo(map);
 
+      // my position
       DG.marker(coordsArr).addTo(map);
 
+      // other points
       basicPoints.forEach(point => {
         const marker = DG.marker(point.coords, { icon: point.icon }).addTo(map);
-        marker.bindPopup(`<p>${point.title}<br /></p>`);
+        marker.bindPopup(`<div>
+            <p>${point.title}<br /></p>
+            <img src="${point.imgs[0]}" width="200" height="150"/>
+          </div>`);
+
+        marker.on("popupopen", () => {
+          console.log(`Popup opened for marker at ${point.title}`);
+        });
       });
 
       const latLngs = [
@@ -35,6 +49,15 @@ export default {
         [51.12828, 71.43052],
       ];
       DG.ruler(latLngs).addTo(map);
+
+      const startCoords = [this.ltd, this.lng]; // Start coordinates (current location)
+      const endCoords = [51.12579, 71.4465]; // End coordinates (destination)
+
+      const routing = DG._distance({
+        points: [startCoords, endCoords],
+      });
+
+      routing.addTo(map);
     },
     async initLocation() {
       if ("geolocation" in navigator) {
