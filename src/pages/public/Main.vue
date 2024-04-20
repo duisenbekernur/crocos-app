@@ -23,7 +23,7 @@ export default {
 
 <template>
   <div class="main">
-    <CategoriesSurvey v-if="surveyFinished" @finish="bool => (surveyFinished = bool)" />
+    <CategoriesSurvey v-if="!surveyFinished" @finish="surveyFinished = true" />
     <template v-else>
       <LeafletMap @send-message="sendMessage" />
       <MapChat ref="chat" />
