@@ -7,12 +7,25 @@ export default {
     },
   },
   name: "ChatMiddle",
+  methods: {
+    toBottom() {
+      const div = document.querySelector("#chat-middle");
+      if (div) div.scrollTo({ top: div.scrollHeight, behavior: "smooth" });
+    },
+  },
 };
 </script>
 
 <template>
-  <div class="chat-middle">
-    <div v-for="message in messages" :key="message.id">
+  <div id="chat-middle" class="chat-middle">
+    <div
+      v-for="message in messages"
+      :key="message.id"
+      style="display: flex; align-items: end; gap: 4px"
+    >
+      <!--      <div v-if="message.type === 'bot'" class="bot-avatar">-->
+      <!--        <img src="/chat.svg" style="width: 25px" />-->
+      <!--      </div>-->
       <div
         :class="{
           message: true,
@@ -20,15 +33,18 @@ export default {
           user: message.type === 'user',
         }"
       >
-        {{ message.text }}
+        <div v-html="message.text"></div>
       </div>
+      <!--      <div v-if="message.type === 'user'" class="user-avatar">-->
+      <!--        <img src="/user.png" style="color: #fff; width: 25px" />-->
+      <!--      </div>-->
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .chat-middle {
-  height: 400px;
+  height: 500px;
   background-color: #fff;
   display: flex;
   flex-direction: column;
@@ -54,5 +70,25 @@ export default {
   background-color: #ebebeb;
   margin-left: auto;
   text-align: left;
+}
+
+.bot-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  background-color: #535bf2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  background-color: #535bf2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

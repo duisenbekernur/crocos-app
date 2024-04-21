@@ -14,6 +14,9 @@ export default {
       routingControl: null,
       route: null,
 
+      clickedPoints: [],
+      isShowedAdvert: false,
+
       featureGroups: [],
       selectedMarker: null,
 
@@ -48,8 +51,8 @@ export default {
       // magnification with which the map will start
       const zoom = 13;
       // co-ordinates
-      const lat = this.ltd;
-      const lng = this.lng;
+      const lat = this.ltd || 51.090263;
+      const lng = this.lng || 71.417911;
 
       // calling map
       const map = L.map("map", config).setView([lat, lng], zoom);
@@ -60,7 +63,7 @@ export default {
       basicPoints.forEach(point => {
         const marker = new L.Marker(point.coords, { icon: point.icon })
           .bindPopup(
-            `<div>
+            `<div style="width: 100px;">
             <p>${point.title}<br /></p>
           </div>`
           )
@@ -74,6 +77,19 @@ export default {
 
           this.showSidebarWithText(point.id);
           this.makeRouting(point);
+
+          this.clickedPoints.push(point);
+
+          if (this.clickedPoints.length > 2 && !this.isShowedAdvert) {
+            this.isShowedAdvert = true;
+            this.$emit("send-message", {
+              message: `Еще раз привет, вижу ты заинтересован! <br /><br />
+                Рассказать как сходить дешево на все достопримечательности?`,
+              type: "bot",
+            });
+
+            this.$emit("recommend", ["Да", "Нет"]);
+          }
         });
       });
       L.polyline(latlngs, {
@@ -132,7 +148,10 @@ export default {
         this.routingControl = null;
       }
       this.routingControl = L.Routing.control({
-        waypoints: [L.latLng(this.ltd, this.lng), L.latLng(point.coords[0], point.coords[1])],
+        waypoints: [
+          L.latLng(this.ltd || 51.090263, this.lng || 71.417911),
+          L.latLng(point.coords[0], point.coords[1]),
+        ],
         routeWhileDragging: true,
         lineOptions: {
           styles: [{ color: point.color, opacity: 0.7, weight: 8 }],
@@ -146,6 +165,7 @@ export default {
             distance: route.summary.totalDistance,
             duration: route.summary.totalTime,
           };
+          this.$emit("point", route.summary);
         }
       });
     },
@@ -178,6 +198,8 @@ export default {
                 console.error("An unknown error occurred.");
                 break;
             }
+
+            this.initMap();
           }
         );
       } else {
@@ -197,16 +219,52 @@ export default {
     sendMessage(type) {
       switch (type) {
         case "walk":
-          this.$emit("send-message", { message: `Добраться пешком до ${this.currentPoint.title}` });
+          this.$emit("send-message", {
+            message: `Сколько времени займет поездка пешком до ${this.currentPoint.title}`,
+          });
           break;
         case "bus":
           this.$emit("send-message", {
-            message: `Добраться на автобусе до ${this.currentPoint.title}`,
+            message: `Сколько времени займет поездка на автобусе до ${this.currentPoint.title}`,
           });
           break;
         case "taxi":
           this.$emit("send-message", {
-            message: `Добраться на такси до ${this.currentPoint.title}`,
+            message: `Сколько времени займет поездка на такси до ${this.currentPoint.title}`,
+          });
+          break;
+      }
+
+      setTimeout(() => {
+        this.getDurationFromBot(type);
+      }, 1500);
+    },
+    getDurationFromBot(type) {
+      const speed = type === "walk" ? 5 : type === "bus" ? 30 : 43;
+      const minutes = ((Math.floor(this.route.distance) / (speed * 1000)) * 60).toFixed(0);
+      const minuteInStr =
+        minutes > 60
+          ? (minutes / 60).toFixed(0) + " час " + (minutes % 60) + " минут"
+          : (minutes % 60) + " минут";
+      const duration = `${minuteInStr}`;
+
+      switch (type) {
+        case "walk":
+          this.$emit("send-message", {
+            message: `Добраться пешком до ${this.currentPoint.title} длиться примерно ${duration}`,
+            type: "bot",
+          });
+          break;
+        case "bus":
+          this.$emit("send-message", {
+            message: `Добраться на автобусе до ${this.currentPoint.title} длиться примерно ${duration}`,
+            type: "bot",
+          });
+          break;
+        case "taxi":
+          this.$emit("send-message", {
+            message: `Добраться на такси до ${this.currentPoint.title} длиться примерно ${duration}`,
+            type: "bot",
           });
           break;
       }
@@ -240,6 +298,22 @@ export default {
           </p>
 
           <div>
+            <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 10px">
+              <div style="display: flex; gap: 4px">
+                <img
+                  v-for="_ in Array.from(Array(currentPoint.rating).keys())"
+                  src="/rating-filled.png"
+                  style="width: 17px; height: 17px"
+                />
+                <img
+                  v-for="_ in Array.from(Array(5 - currentPoint.rating).keys())"
+                  src="/rating.png"
+                  style="width: 17px; height: 17px"
+                />
+              </div>
+              <p style="font-size: 15px; color: #9ca3af">{{ currentPoint.grades + " оценок" }}</p>
+            </div>
+
             <template v-if="route">
               <p style="font-size: 15px; color: #9ca3af">Дистанция</p>
               <p style="font-size: 14px; margin-bottom: 10px">
@@ -247,12 +321,12 @@ export default {
               </p>
             </template>
 
-            <template v-if="route">
-              <p style="font-size: 15px; color: #9ca3af">Время поездки</p>
-              <p style="font-size: 14px; margin-bottom: 10px">
-                {{ `${Math.ceil(route.duration / 60) * 2} минут` }}
-              </p>
-            </template>
+            <!--            <template v-if="route">-->
+            <!--              <p style="font-size: 15px; color: #9ca3af">Время поездки</p>-->
+            <!--              <p style="font-size: 14px; margin-bottom: 10px">-->
+            <!--                {{ `${Math.ceil(route.duration / 60) * 2} минут` }}-->
+            <!--              </p>-->
+            <!--            </template>-->
 
             <p style="font-size: 15px; color: #9ca3af">Время работы</p>
             <div

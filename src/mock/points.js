@@ -16,6 +16,8 @@ export const basicPoints = [
     title: "Национальный музей РК",
     coords: [51.11823, 71.46938],
     icon: museumIcon,
+    rating: 5,
+    grades: 354,
     subtitle: "Музей",
     imgs: [
       "https://www.matritca.kz/uploads/posts/2022-07/1657948385_jxbmwo0quvkvqlqngqbd8jagyz6zmznlu7q8ar6q.jpg",
@@ -37,6 +39,8 @@ export const basicPoints = [
     subtitle: "Монументы",
     imgs: ["https://www.advantour.com/img/kazakhstan/astana/baiterek.jpg"],
     color: "green",
+    rating: 5,
+    grades: 156,
     workTimes: {
       startTime: "10:00",
       stopTime: "22:00",
@@ -51,6 +55,8 @@ export const basicPoints = [
     coords: [51.08935, 71.416],
     icon: expoIcon,
     subtitle: "Музей",
+    rating: 4,
+    grades: 2754,
     imgs: [
       "https://www.wernersobek.com/wp-content/uploads/resized/2021/05/EXPO-2017-Astana-1920x0-c-default.jpg",
     ],
@@ -68,6 +74,8 @@ export const basicPoints = [
     title: "Музей Сакен Сейфуллина",
     coords: [51.171494, 71.42349],
     icon: sakenIcon,
+    rating: 4,
+    grades: 68,
     subtitle: "Музей",
     imgs: [
       "https://www.astanagid.kz/thumbs/750_500_5_100/gosudarstvennyj_muzej_imeni_s_sejfullina_foto1.jpg",
@@ -86,11 +94,13 @@ export const basicPoints = [
     title: "Мәңгілік Ел",
     coords: [51.104301, 71.430113],
     icon: mangilikelIcon,
+    rating: 5,
+    grades: 354,
     subtitle: "Монументы",
     imgs: [
       "https://wildticketasia.com/uploads/posts/2023-01/1675010829_mangilik-el-triumphal-arch-3.jpg",
     ],
-    color: "pink",
+    color: "purple",
     workTimes: {
       startTime: "00:00",
       stopTime: "23:59",
@@ -104,9 +114,11 @@ export const basicPoints = [
     title: "Қазақ Елі монументі",
     coords: [51.121049, 71.467149],
     icon: qazaqeliIcon,
+    rating: 5,
+    grades: 122,
     subtitle: "Монументы",
     imgs: ["https://upload.wikimedia.org/wikipedia/ru/6/6e/Kazakh_Eli_monument.JPG"],
-    color: "pink",
+    color: "purple",
     workTimes: {
       startTime: "00:00",
       stopTime: "23:59",
@@ -120,6 +132,8 @@ export const basicPoints = [
     title: "Ботаникалық саябақ",
     coords: [51.106433, 71.416117],
     icon: botsadIcon,
+    rating: 4,
+    grades: 236,
     subtitle: "Парки",
     imgs: [
       "https://cdn.qazaqstan.tv/old/articles/1/article_14561.jpg?w=1200&h=630&format=jpg&resize=aspectfill&g=center",
@@ -141,6 +155,8 @@ export const basicPoints = [
     subtitle: "Парки",
     imgs: ["https://m.ticketon.kz/files/media/probezhka.jpg"],
     color: "green",
+    rating: 4,
+    grades: 199,
     workTimes: {
       startTime: "00:00",
       stopTime: "23:59",
@@ -150,15 +166,17 @@ export const basicPoints = [
       "Триатлон парк Астана (каз. Астана триатлон паркі) — городской парк в Астане который используется как зона отдыха для бега, катания на лыжах и езды на велосипеде. Парк открыли в июле 2016 года в качестве подарка к 18-летию столицы от крупнейшего строительного холдинга Казахстана Bi Group. Парк расположен рядом с парком имени Бауыржана Момышулы и Президентским парком на правом берегу реки Ишим.",
   },
   {
-    id: 6,
+    id: 9,
     title: "Қазақ Елі монументі",
     coords: [51.161238, 71.419948],
     icon: naberejnayaIcon,
     subtitle: "Парки",
+    rating: 5,
+    grades: 155,
     imgs: [
       "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/13/de/62/b0/quay-astana.jpg?w=1200&h=1200&s=1",
     ],
-    color: "pink",
+    color: "purple",
     workTimes: {
       startTime: "00:00",
       stopTime: "23:59",
