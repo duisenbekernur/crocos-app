@@ -39,6 +39,8 @@ export default {
     sendMessage(payload) {
       if (!payload.message) return;
 
+      console.log(payload);
+
       this.messages.push({
         id: this.messages.length,
         type: payload.type ?? "user",

@@ -12,13 +12,15 @@ export default {
   },
   data() {
     return {
+      loading: false,
       message: "",
     };
   },
   methods: {
     async postToAI(query) {
-      await axios.post(
-        "http://172.18.0.1:8080/user-query",
+      this.loading = true;
+      const { data } = await axios.post(
+        "http://localhost:8080/user-query",
         {
           query,
         },
@@ -26,12 +28,15 @@ export default {
           params: {
             distance: this.point ? this.point.totalDistance : null,
           },
+          withCredentials: true,
         }
       );
+      this.loading = false;
+
+      this.sendMessage(data, false, false, true);
     },
-    sendMessage(mes, rec = false, ai = false) {
-      this.$emit("send-message", { message: mes });
-      this.message = "";
+    sendMessage(mes, rec = false, ai = false, isBot = false) {
+      this.$emit("send-message", { message: mes, type: isBot ? "bot" : "user" });
 
       if (rec) {
         this.$emit("click-recommend", mes);
@@ -40,6 +45,21 @@ export default {
       if (ai) {
         this.postToAI(mes);
       }
+
+      console.log("here1", this.message);
+      if (this.message.includes("код")) {
+        console.log("here", this.message);
+        setTimeout(() => {
+          this.sendMessage(
+            `<p>Ваш QR</p> <img src="https://www.qrstuff.com/images/default_qrcode.png"  width="200"/>`,
+            false,
+            false,
+            true
+          );
+        }, 400);
+      }
+
+      this.message = "";
     },
   },
 };
@@ -64,6 +84,8 @@ export default {
       </div>
     </div>
 
+    <div v-if="loading" style="font-size: 35px">...</div>
+
     <div class="bottom-input">
       <input
         v-model="message"
@@ -71,7 +93,7 @@ export default {
         @keyup.enter="sendMessage(message, false, true)"
       />
       <img
-        @click="sendMessage"
+        @click="sendMessage(message, false, false)"
         src="/send.svg"
         style="
           margin: 0;
